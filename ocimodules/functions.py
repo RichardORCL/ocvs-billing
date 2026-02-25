@@ -103,18 +103,18 @@ def create_signer(config_profile, is_instance_principals, is_delegation_token):
 
         return config, signer
 
-#################################################
-#                 Login                 #
-#################################################
-def login(config, signer):
-    print("OCI SDK Version: {}".format(oci.__version__))
-    identity = oci.identity.IdentityClient(config, signer=signer)
-    if "user" in config:
-        user = identity.get_user(config["user"]).data
-        print("Logged in as: {} @ {}".format(user.description, config["region"]))
-    else:
-        print("Logged in as: {} @ {}".format("InstancePrinciple/DelegationToken", config["region"]))
-        user = "IP-DT"
+# #################################################
+# #                 Login                 #
+# #################################################
+# def login(config, signer):
+#     print("OCI SDK Version: {}".format(oci.__version__))
+#     identity = oci.identity.IdentityClient(config, signer=signer)
+#     if "user" in config:
+#         user = identity.get_user(config["user"]).data
+#         print("Logged in as: {} @ {}".format(user.description, config["region"]))
+#     else:
+#         print("Logged in as: {} @ {}".format("InstancePrinciple/DelegationToken", config["region"]))
+#         user = "IP-DT"
 
 
 ##########################################################################
