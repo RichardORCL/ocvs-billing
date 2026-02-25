@@ -11,6 +11,7 @@ def input_command_line(help=False):
 
     # If running in Cloud Shell (OCI_CLI_CLOUD_SHELL=true), default to Delegation Token
     if os.environ.get("OCI_CLI_CLOUD_SHELL", "").lower() == "true":
+        print ("Running in Cloud Shell..")
         is_delegation_token = True
         is_instance_principals = False
         config_profile = "DEFAULT"
