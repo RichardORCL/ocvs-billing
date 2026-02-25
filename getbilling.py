@@ -22,6 +22,20 @@ application_version = "25.02.2026"
 # functions
 ############################################
 
+def region_from_ocid(ocid):
+    """
+    Extract region from an OCID.
+    OCID format: ocid1.<resource>.<realm>.<region>.<unique_id>
+    """
+    if not ocid:
+        return ""
+    parts = ocid.split(".")
+    if len(parts) >= 4:
+        return parts[3]
+    m = re.search(r"ocid1\.\w+\.\w+\.(.+?)\.", ocid)
+    return m.group(1) if m else ""
+
+
 def GetSDDCByOCID(config, signer):
     """
     Returns a function that looks up an SDDC by its OCID.
@@ -190,8 +204,9 @@ rows = []
 get_sddc = GetSDDCByOCID(config, signer)
 
 for host in esxi_hosts:
+    # Region from the host's OCID (source of truth), not from config or host.region
+    region = region_from_ocid(getattr(host, "id", "") or getattr(host, "identifier", "")) or config.get("region", "")
     # Attempt to get each field, fallback to empty string/None if missing
-    region = getattr(host, "region", "") or config.get("region", "")
     display_name = getattr(host, "display_name", "") or getattr(host, "name", "")
     compartment_id = GetCompartmentFullPath(compartments, getattr(host, "compartment_id", ""))
     sddc_ocid = getattr(host, "sddc_id", "")
