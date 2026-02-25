@@ -1,0 +1,6 @@
+Region,Compartment,ESXi Host,SDDC,Lifecycle State,Host Shape,OCPU Count,time-created,Days old,Current Commitment,Contract End Date,Next Commitment,Days left
+eu-frankfurt-1,/root/OCVS,DonorHost,OCVS,DELETED,BM.DenseIO.E4.128,32.0,2026-02-25,0,ONE_YEAR,2026-02-25,HOUR,0
+eu-frankfurt-1,/root/OCVS,TempHost,OCVS,DELETED,BM.DenseIO.E4.128,32.0,2026-02-25,0,ONE_YEAR,2026-02-25,HOUR,0
+eu-frankfurt-1,/root/OCVS,ESXi-AMD-3,OCVS,ACTIVE,BM.DenseIO.E4.128,32.0,2025-10-15,133,HOUR,2026-02-25,HOUR,0
+eu-frankfurt-1,/root/OCVS,ESXi-AMD-2,OCVS,ACTIVE,BM.DenseIO.E4.128,32.0,2025-10-15,133,HOUR,2026-02-25,HOUR,0
+eu-frankfurt-1,/root/OCVS,ESXi-AMD-1,OCVS,ACTIVE,BM.DenseIO.E4.128,32.0,2025-10-15,133,HOUR,2026-02-25,HOUR,0

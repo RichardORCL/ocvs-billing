@@ -1,6 +1,7 @@
 import sys
 import time
-from datetime import date
+import csv
+from datetime import date, datetime
 import oci
 import requests
 import re
@@ -76,8 +77,8 @@ def GetSDDCByOCID(config, signer):
 
     return lookup
 
-def print_table(headers, rows):
-    """Print a text table without external dependencies."""
+def print_table(headers, rows, table_name=None):
+    """Print a text table without external dependencies. If table_name is provided, also save the table as a CSV file (filename: table_name_YYYYMMDD_HHMMSS.csv)."""
     if not rows:
         print("No data to display.")
         return
@@ -91,6 +92,18 @@ def print_table(headers, rows):
     print("-" * (sum(col_widths) + 2 * (len(headers) - 1)))
     for row in rows:
         print(fmt.format(*[str(x) for x in row]))
+
+    if table_name:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        csv_filename = f"{table_name}_{timestamp}.csv"
+        try:
+            with open(csv_filename, "w", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                writer.writerow(headers)
+                writer.writerows(rows)
+            print(f"\nTable saved to {csv_filename}")
+        except Exception as e:
+            print(f"Error saving table to CSV: {e}")
 
 
 
@@ -195,6 +208,8 @@ TABLE_HEADERS = [
     "Lifecycle State",
     "Host Shape",
     "OCPU Count",
+    "time-created",
+    "Days old",
     "Current Commitment",
     "Contract End Date",
     "Next Commitment",
@@ -220,6 +235,24 @@ for host in esxi_hosts:
         host_shape = getattr(host, "host_shape_name", "")  # fallback
 
     host_ocpu_count = getattr(host, "host_ocpu_count", "")
+
+    # Time created and days old
+    time_created = getattr(host, "time_created", None)
+    days_old = ""
+    if time_created:
+        if hasattr(time_created, "date"):
+            time_created_date = time_created.date()
+        elif hasattr(time_created, "strftime"):
+            time_created_date = time_created
+        else:
+            time_created_date = None
+        if time_created_date:
+            days_old = (date.today() - time_created_date).days
+            time_created = time_created_date.strftime("%Y-%m-%d")
+        else:
+            time_created = ""
+    else:
+        time_created = ""
 
     # Billing fields (these sometimes may be under different attribute names depending on API version)
     current_commitment = getattr(host, "current_commitment", "")
@@ -252,6 +285,8 @@ for host in esxi_hosts:
         lifecycle_state,
         host_shape,
         host_ocpu_count,
+        time_created,
+        days_old,
         current_commitment,
         contract_end_date,
         next_commitment,
@@ -259,7 +294,7 @@ for host in esxi_hosts:
     ])
 
 print("\nESXi Host Billing Table:\n")
-print_table(TABLE_HEADERS, rows)
+print_table(TABLE_HEADERS, rows, table_name="esxi_host_billing")
 
 if not esxi_donor_hosts:
     print("No donor hosts found")
@@ -298,4 +333,4 @@ else:
             contract_end_date_str,
             days_left,
         ])
-    print_table(donor_headers, donor_rows)
+    print_table(donor_headers, donor_rows, table_name="esxi_donor_hosts")
