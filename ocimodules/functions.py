@@ -9,14 +9,6 @@ import time
 ##########################################################################
 def input_command_line(help=False):
 
-    # If running in Cloud Shell (OCI_CLI_CLOUD_SHELL=true), default to Delegation Token
-    if os.environ.get("OCI_CLI_CLOUD_SHELL", "").lower() == "true":
-        print ("Running in Cloud Shell..")
-        is_delegation_token = True
-        is_instance_principals = False
-        config_profile = "DEFAULT"
-
-
     parser = argparse.ArgumentParser(formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=80, width=130))
     parser.add_argument('-cp', default="DEFAULT", dest='config_profile', help='Config Profile inside the config file')
     parser.add_argument('-ip', action='store_true', default=False, dest='is_instance_principals', help='Use Instance Principals for Authentication')
@@ -24,6 +16,14 @@ def input_command_line(help=False):
     parser.add_argument("-log", nargs='?', const='log.txt', default="", dest='log_file', help="Output also to logfile. If logfile not specified, will log to log.txt")
 
     cmd = parser.parse_args()
+
+    # If running in Cloud Shell (OCI_CLI_CLOUD_SHELL=true), default to Delegation Token
+    if os.environ.get("OCI_CLI_CLOUD_SHELL", "").lower() == "true":
+        print("Running in Cloud Shell..")
+        cmd.is_delegation_token = True
+        cmd.is_instance_principals = False
+        cmd.config_profile = "DEFAULT"
+
     if help:
         parser.print_help()
 
