@@ -1,6 +1,6 @@
 # OCVS Billing overview
 
-## How `getbilling.py` works
+## Overview
 
 `getbilling.py` is a CLI utility that builds an **OCI VMware Solution (OCVS) ESXi host billing overview** for your tenancy: it discovers ESXi hosts, resolves related SDDC names, and surfaces commitment and contract dates so you can see what is committed and when terms end.
 
@@ -11,6 +11,15 @@
 - Valid OCI authentication (API key config file is typical). The script can also use instance principals (`-ip`) or delegation token (`-dt`); in Cloud Shell it defaults to delegation token when `OCI_CLI_CLOUD_SHELL=true`.
 
 ### Running the script
+
+Easiest way to run this script is from the OCI Cloud Shell:
+```
+git clone https://github.com/RichardORCL/OCVS-Billing.git
+cd OCVS-Billing
+python getbilling.py
+```
+
+You can also run it from any other place where you have the OCI CLI configured.
 
 ```bash
 python getbilling.py [-cp PROFILE] [-ip] [-dt] [-log [FILE]]
