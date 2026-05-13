@@ -7,7 +7,6 @@
 ### Prerequisites
 
 - Python environment with the project dependencies installed (including `oci` and `requests`).
-- OCI Python SDK **at least version `2.164.0`** (the script checks this at startup).
 - Valid OCI authentication (API key config file is typical). The script can also use instance principals (`-ip`) or delegation token (`-dt`); in Cloud Shell it defaults to delegation token when `OCI_CLI_CLOUD_SHELL=true`.
 
 ### Running the script
@@ -56,8 +55,4 @@ For **each selected region** (by temporarily setting `config["region"]`):
 
 Tables are printed to the console. When a table has a save name, the script also writes **`esxi_host_billing_YYYYMMDD_HHMMSS.csv`** and **`esxi_donor_hosts_YYYYMMDD_HHMMSS.csv`** in the current working directory.
 
-### Implementation notes
-
-- OCI’s circuit breaker is disabled at import (`NoCircuitBreakerStrategy`) for predictable SDK behavior in this script.
-- Application version string is embedded in the script as `application_version` (for human reference; use `oci.__version__` or your deployment tagging for SDK/runtime versioning).
 
